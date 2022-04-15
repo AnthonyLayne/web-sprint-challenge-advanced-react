@@ -1,8 +1,27 @@
-import React from 'react'
+import React from "react";
+
+import { API } from "../helpers/endpoint";
+import { DEFAULT_STATE } from "../helpers/defaultState";
+
+import { coordinates } from "../helpers/coordinates";
+
+//need to find out current position, then the position the B moved to and set the state to that.
+//need a submit handler to POST the x/y position, email and number of clicks to the API.
+//up = -3, down = +3, left= -1, right= +1
+//coordinates -> x = horizontal(left -1,right +1), y = verticle(up -1/down +1), Coordinates(x,y)
+//need current coordinates to determine future coordinates upon clicking keypad buttons.
 
 export default class AppClass extends React.Component {
+  state = DEFAULT_STATE;
+
+  handleClick = (x, y) => {
+    this.setState((prevState) => {
+      const { grid: prevGrid, clicks: prevClicks } = prevState;
+    });
+  };
+
   render() {
-    const { className } = this.props
+    const { className } = this.props;
     return (
       <div id="wrapper" className={className}>
         <div className="info">
@@ -10,21 +29,21 @@ export default class AppClass extends React.Component {
           <h3 id="steps">You moved 0 times</h3>
         </div>
         <div id="grid">
-          <div className="square"></div>
-          <div className="square"></div>
-          <div className="square"></div>
-          <div className="square"></div>
-          <div className="square active">B</div>
-          <div className="square"></div>
-          <div className="square"></div>
-          <div className="square"></div>
-          <div className="square"></div>
+          {DEFAULT_STATE.grid.map(() => {
+            return (
+              <div key="idx" className="square">
+                {}
+              </div>
+            );
+          })}
         </div>
         <div className="info">
           <h3 id="message"></h3>
         </div>
         <div id="keypad">
-          <button id="left">LEFT</button>
+          <button id="left" onClick={this.handleClick()}>
+            LEFT
+          </button>
           <button id="up">UP</button>
           <button id="right">RIGHT</button>
           <button id="down">DOWN</button>
@@ -35,6 +54,6 @@ export default class AppClass extends React.Component {
           <input id="submit" type="submit"></input>
         </form>
       </div>
-    )
+    );
   }
 }
