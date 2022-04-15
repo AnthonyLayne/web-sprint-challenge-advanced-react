@@ -3,7 +3,7 @@ import React from "react";
 import { API } from "../helpers/endpoint";
 import { DEFAULT_STATE } from "../helpers/defaultState";
 
-import { coordinates } from "../helpers/coordinates";
+import { getCoordinates } from "../helpers/coordinates";
 
 //need to find out current position, then the position the B moved to and set the state to that.
 //need a submit handler to POST the x/y position, email and number of clicks to the API.
@@ -16,7 +16,9 @@ export default class AppClass extends React.Component {
 
   handleClick = (x, y) => {
     this.setState((prevState) => {
-      const { grid: prevGrid, clicks: prevClicks } = prevState;
+      const { rowLength: prevRowLength, grid: prevGrid, clicks: prevClicks } = prevState;
+      const { x: currX, y: currY } = getCoordinates(prevGrid, prevRowLength);
+      //
     });
   };
 
