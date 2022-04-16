@@ -5,6 +5,7 @@ import { DEFAULT_STATE } from "../helpers/defaultState";
 
 import { getCoordinates } from "../helpers/coordinates";
 import { getShiftIndexAmount } from "../helpers/getShiftIndexAmount";
+import axios from "axios";
 
 //need to find out current position, then the position the B moved to and set the state to that.
 //need a submit handler to POST the x/y position, email and number of clicks to the API.
@@ -48,8 +49,26 @@ export default class AppClass extends React.Component {
     });
   };
 
+  //The endpoint expects a payload like `{ "x": 1, "y": 2, "steps": 3, "email": "lady@gaga.com" }`
+
+  handleSubmit = (e) => {
+    e.preventDefault();
+
+    const { email, clicks, grid, rowLength } = this.state;
+    const { x: xPos, y: yPos } = getCoordinates(grid, rowLength);
+    axios
+      .post(API, {
+        email,
+        steps: clicks,
+        x: xPos,
+        y: yPos,
+      })
+      .then((res) => this.setState(() => ({ error: res.data.message, email: "" })))
+      .catch((e) => this.setState(() => ({ error: e.response.data.message })));
+  };
+
   render() {
-    const { clicks, grid, error, rowLength } = this.state;
+    const { clicks, grid, error, rowLength, email } = this.state;
     const { className } = this.props;
     const { x: xPos, y: yPos } = getCoordinates(grid, rowLength);
 
@@ -97,8 +116,16 @@ export default class AppClass extends React.Component {
           </button>
         </div>
         <form>
-          <input id="email" type="email" placeholder="type email"></input>
-          <input id="submit" type="submit"></input>
+          <input
+            id="email"
+            type="email"
+            placeholder="type email"
+            value={email}
+            onChange={({ target: { value } }) => {
+              this.setState({ email: value });
+            }}
+          ></input>
+          <input id="submit" type="submit" onClick={this.handleSubmit}></input>
         </form>
       </div>
     );
