@@ -29,13 +29,15 @@ grid.forEach((square, i) => {
  * @returns `{ x: number, y: number }`
  */
 export const getCoordinates = (grid, rowLength) => {
+  let currentArrayIndex = 0;
   let xPos = 0;
   let yPos = 0;
 
-  const test = grid.some((square, i) => {
+  grid.some((square, i) => {
     if (square === "B") {
       const squareIdx = i + 1; // [6] -> (1,3)  |>  [7]
 
+      currentArrayIndex = i;
       xPos = squareIdx % rowLength; // [6] -> (1,3)  |>  7 % 3 === 1
       yPos = Math.ceil(squareIdx / rowLength); // [6] -> (1,3)  |>  7 / 3 === 2.3  |>  3
       // result |> (1, 3)
@@ -44,7 +46,7 @@ export const getCoordinates = (grid, rowLength) => {
     }
   });
 
-  return { x: xPos, y: yPos };
+  return { x: xPos, y: yPos, currentArrayIndex };
 };
 
 //   let currentIndex = grid.findIndex((square) => square === "B");
