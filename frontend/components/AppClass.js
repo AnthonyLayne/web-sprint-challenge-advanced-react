@@ -32,7 +32,7 @@ export default class AppClass extends React.Component {
           if (currY === 1) {
             return { message: "You can't go up" };
           } else {
-            const shiftIndexAmount = getShiftIndexAmount(this.rowLength)[id];
+            const shiftIndexAmount = getShiftIndexAmount(this.state.rowLength)[id];
             const newIndex = currentArrayIndex + shiftIndexAmount;
 
             return {
@@ -42,19 +42,20 @@ export default class AppClass extends React.Component {
         }
         case "right": {
           if (currX === prevRowLength) {
-            //out of bounds "You can't go right"
+            return { message: "You can't go right" };
+          } else {
           }
           break;
         }
         case "down": {
           if (currY === prevColumnLength) {
-            //out of bounds You can't go down
+            return { message: "You can't go down" };
           }
           break;
         }
         case "left": {
           if (currX === 1) {
-            //out of bounds You can't go left
+            return { message: "You can't go left" };
           }
           break;
         }
@@ -77,9 +78,9 @@ export default class AppClass extends React.Component {
           <h3 id="steps">You moved 0 times</h3>
         </div>
         <div id="grid">
-          {this.state.grid.map((square) => {
+          {this.state.grid.map((square, i) => {
             return (
-              <div key="idx" className="square">
+              <div key={`idx-${i}`} className="square">
                 {square}
               </div>
             );
