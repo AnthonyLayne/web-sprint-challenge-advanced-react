@@ -49,25 +49,35 @@ export default class AppClass extends React.Component {
   };
 
   render() {
-    const { clicks } = this.state;
+    const { clicks, grid, error, rowLength } = this.state;
     const { className } = this.props;
+    const { x: xPos, y: yPos } = getCoordinates(grid, rowLength);
+
     return (
       <div id="wrapper" className={className}>
         <div className="info">
-          <h3 id="coordinates">Coordinates (2, 2)</h3>
+          <h3 id="coordinates">
+            Coordinates ({xPos}, {yPos})
+          </h3>
           <h3 id="steps">You moved {clicks} times</h3>
         </div>
         <div id="grid">
-          {this.state.grid.map((square, i) => {
+          {grid.map((square, i) => {
+            const active = "B" === square;
+
+            const content = active ? "B" : "";
+
+            const classes = ["square"];
+            if (active) classes.push("active");
             return (
-              <div key={`idx-${i}`} className="square">
-                {square}
+              <div key={`idx-${i}`} className={classes.join(" ")}>
+                {content}
               </div>
             );
           })}
         </div>
         <div className="info">
-          <h3 id="message">{this.state.error}</h3>
+          <h3 id="message">{error}</h3>
         </div>
         <div id="keypad">
           <button id="left" onClick={this.handleClick}>
