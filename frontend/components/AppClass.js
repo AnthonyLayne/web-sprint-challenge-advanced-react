@@ -34,25 +34,28 @@ export default class AppClass extends React.Component {
         (id === "down" && currY === prevColumnLength) ||
         (id === "left" && currX === 1)
       ) {
-        return { message: `You can't go ${id}` };
+        return { error: `You can't go ${id}` };
       }
 
-      const shiftIndexAmount = getShiftIndexAmount(this.state.rowLength)[id];
+      const shiftIndexAmount = getShiftIndexAmount(this.state.rowLength, id);
       const newIndex = currentArrayIndex + shiftIndexAmount;
 
       return {
+        error: "",
+        clicks: prevClicks + 1,
         grid: prevGrid.map((_, i) => (i === newIndex ? "B" : null)),
       };
     });
   };
 
   render() {
+    const { clicks } = this.state;
     const { className } = this.props;
     return (
       <div id="wrapper" className={className}>
         <div className="info">
           <h3 id="coordinates">Coordinates (2, 2)</h3>
-          <h3 id="steps">You moved 0 times</h3>
+          <h3 id="steps">You moved {clicks} times</h3>
         </div>
         <div id="grid">
           {this.state.grid.map((square, i) => {
@@ -64,7 +67,7 @@ export default class AppClass extends React.Component {
           })}
         </div>
         <div className="info">
-          <h3 id="message">{this.state.message}</h3>
+          <h3 id="message">{this.state.error}</h3>
         </div>
         <div id="keypad">
           <button id="left" onClick={this.handleClick}>
@@ -79,7 +82,7 @@ export default class AppClass extends React.Component {
           <button id="down" onClick={this.handleClick}>
             DOWN
           </button>
-          <button id="reset" onClick={this.handleClick}>
+          <button id="reset" onClick={() => this.setState(DEFAULT_STATE)}>
             reset
           </button>
         </div>
