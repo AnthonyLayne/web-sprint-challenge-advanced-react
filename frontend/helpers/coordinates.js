@@ -36,9 +36,10 @@ export const getCoordinates = (grid, rowLength) => {
   grid.some((square, i) => {
     if (square === "B") {
       const squareIdx = i + 1; // [6] -> (1,3)  |>  [7]
+      const rowModulus = squareIdx % rowLength;
 
       currentArrayIndex = i;
-      xPos = squareIdx % rowLength; // [6] -> (1,3)  |>  7 % 3 === 1
+      xPos = rowModulus === 0 ? rowLength : rowModulus; // [6] -> (1,3)  |>  7 % 3 === 1
       yPos = Math.ceil(squareIdx / rowLength); // [6] -> (1,3)  |>  7 / 3 === 2.3  |>  3
       // result |> (1, 3)
 

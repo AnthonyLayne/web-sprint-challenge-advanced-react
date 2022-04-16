@@ -27,45 +27,22 @@ export default class AppClass extends React.Component {
       } = prevState;
       const { x: currX, y: currY, currentArrayIndex } = getCoordinates(prevGrid, prevRowLength);
 
-      switch (id) {
-        case "up": {
-          if (currY === 1) {
-            return { message: "You can't go up" };
-          } else {
-            const shiftIndexAmount = getShiftIndexAmount(this.state.rowLength)[id];
-            const newIndex = currentArrayIndex + shiftIndexAmount;
-
-            return {
-              grid: prevGrid.map((_, i) => (i === newIndex ? "B" : null)),
-            };
-          }
-        }
-        case "right": {
-          if (currX === prevRowLength) {
-            return { message: "You can't go right" };
-          } else {
-          }
-          break;
-        }
-        case "down": {
-          if (currY === prevColumnLength) {
-            return { message: "You can't go down" };
-          }
-          break;
-        }
-        case "left": {
-          if (currX === 1) {
-            return { message: "You can't go left" };
-          }
-          break;
-        }
-        case "reset": {
-          //
-        }
-        default: {
-          return prevState;
-        }
+      // Check for out-of-bounds attempts
+      if (
+        (id === "up" && currY === 1) ||
+        (id === "right" && currX === prevRowLength) ||
+        (id === "down" && currY === prevColumnLength) ||
+        (id === "left" && currX === 1)
+      ) {
+        return { message: `You can't go ${id}` };
       }
+
+      const shiftIndexAmount = getShiftIndexAmount(this.state.rowLength)[id];
+      const newIndex = currentArrayIndex + shiftIndexAmount;
+
+      return {
+        grid: prevGrid.map((_, i) => (i === newIndex ? "B" : null)),
+      };
     });
   };
 
@@ -87,7 +64,7 @@ export default class AppClass extends React.Component {
           })}
         </div>
         <div className="info">
-          <h3 id="message"></h3>
+          <h3 id="message">{this.state.message}</h3>
         </div>
         <div id="keypad">
           <button id="left" onClick={this.handleClick}>
@@ -96,9 +73,15 @@ export default class AppClass extends React.Component {
           <button id="up" onClick={this.handleClick}>
             UP
           </button>
-          <button id="right">RIGHT</button>
-          <button id="down">DOWN</button>
-          <button id="reset">reset</button>
+          <button id="right" onClick={this.handleClick}>
+            RIGHT
+          </button>
+          <button id="down" onClick={this.handleClick}>
+            DOWN
+          </button>
+          <button id="reset" onClick={this.handleClick}>
+            reset
+          </button>
         </div>
         <form>
           <input id="email" type="email" placeholder="type email"></input>
