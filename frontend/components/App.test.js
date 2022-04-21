@@ -23,4 +23,9 @@ describe("Key Pad", () => {
     expect(upBttn).toBeVisible();
     expect(upBttn).toBeInTheDocument();
   });
+  test("down is present", () => {
+    const downBttn = screen.queryByText("DOWN");
+    expect(downBttn).toBeVisible();
+    expect(downBttn).toBeInTheDocument();
+  });
 });
